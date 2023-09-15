@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FarmBuddy-Checkout</title>
+    <link rel="stylesheet" href="checkout.css" />
+  </head>
+  <body>
+
+    <div class="spinnerContainer">
+      <div class="spinner"></div>
+      <div class="loader">
+        <p>loading</p>
+        <div class="words">
+          <span class="word">card</span>
+          <span class="word">payment options</span>
+          <span class="word">money</span>
+          <span class="word">UPI</span>
+        </div>
+      </div>
+    </div>
+
+
+
+
+<div id="lod">
+    <div class="modal">
+      <form class="form">
+        <div class="credit-card-info--form">
+          <div class="input_container">
+            <label for="password_field" class="input_label"
+              >full name</label
+            >
+            <input
+              id="password_field"
+              class="input_field"
+              type="text"
+              name="input-name"
+              title="Name"
+              placeholder="Enter your full name"
+            />
+          </div>
+          <div class="input_container">
+            <label for="password" class="input_label">Address</label>
+            <input
+              id="password"
+              class="input_field addr"
+              type="text"
+              name="input-name"
+              title="Address"
+              placeholder="Address"
+            />
+          </div>
+          <div class="input_container">
+            <label for="password_field" class="input_label">Phone Number</label>
+            <input
+              id="password_field"
+              class="input_field phone"
+              type="number"
+              name="input-name"
+              title="Phone Number"
+              placeholder="000-000-000"
+            />
+          </div>
+          <div class="input_container">
+            <fieldset>
+              <legend style="color: #fff;">Select a Payment method</legend>
+            
+              <div>
+                <input type="radio" id="huey" name="drone" value="huey" checked />
+                <label for="huey" style="color: #fff;">COD</label>
+              </div>
+            
+              <div>
+                <input type="radio" id="dewey" name="drone" value="dewey" />
+                <label for="dewey" style="color: #fff;">UPI</label>
+              </div>
+          
+            </fieldset>
+            
+          </div>
+          
+        </div>
+        <input type="button" value="Checkout" class="purchase--btn" id="btn">
+      </form>
+    </div>
+  </div>
+  <iframe width="560" height="315" style="display: none;" src="https://www.youtube.com/embed/hdI2bqOjy3c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  <iframe width="560" height="315" style="display: none;" src="https://www.youtube.com/embed/hdI2bqOjy3c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+  
+  <script src="./checkout.js"></script>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-auth.js";
+      import {
+        getDatabase,
+        ref,
+        get,
+        set,
+        child,
+        update,
+        remove,
+      } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-database.js";
+
+      const firebaseConfig = {
+  apiKey: "AIzaSyAYWp1h1C2AALmc39b6cqwv6GSqlWQrR1c",
+  authDomain: "farmbuddy-106.firebaseapp.com",
+  databaseURL: "https://farmbuddy-106-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "farmbuddy-106",
+  storageBucket: "farmbuddy-106.appspot.com",
+  messagingSenderId: "246405477593",
+  appId: "1:246405477593:web:76c615bf7f242294317ac8"
+};
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase();
+      const dbref = ref(db);
+
+      
+      const url = document.querySelector('#btn').addEventListener('click', GetData);
+      
+      function GetData() {
+        const addr = document.querySelector('#password').value;
+        const phno = document.querySelector('.phone').value;
+        console.log(addr);
+        const dbref = ref(db);
+        
+        get(child(dbref, "people/" + "Name"))
+        .then((snapshot)=>{
+          if(snapshot.exists()){
+            get(child(dbref, "user/" + snapshot.val().Name))
+            .then((snapshot)=>{
+              if(snapshot.exists()){
+                const name = snapshot.val().Name;
+                const order = snapshot.val().orders;
+                        update(child(dbref, "user/" +name), {
+                          Address: addr,
+                          orders: order+1,
+                          Phone: phno,
+                        });
+                         
+                  
+                } else {
+                  alert("No data found");
+                }
+              }).catch((error)=>{
+                alert(error)
+              }) 
+            } else {
+              alert("No data found");
+            }
+          })
+          .catch((error)=>{
+            alert(error)
+          }) 
+          
+
+
+
+
+          
+        }
+    </script>
+    <script>
+      const profile=document.querySelector('.purchase--btn');
+        profile.addEventListener('click',function(){
+          window.location.href="./profile.html";
+        })
+    </script>
+  </body>
+</html>
